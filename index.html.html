@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sistema Cata Treco - Final</title>
+<style>
+  body { font-family: Arial; background:#f4f4f9; margin: 20px;}
+  h2, h3 { text-align: center; }
+  .menu { text-align: center; margin-bottom: 20px;}
+  .menu button { margin: 0 10px; padding: 10px 20px; font-size: 16px; cursor: pointer; }
+  form, .admin-section, #loginAdmin { max-width: 700px; margin: auto; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1);}
+  label { display: block; margin-top: 15px; }
+  input, select { width: 100%; padding: 8px; margin-top: 5px; border-radius: 4px; border: 1px solid #ccc; }
+  button.submit-btn { margin-top: 20px; padding: 10px; width: 100%; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+  button.submit-btn:hover { background-color: #218838; }
+  table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+  th { background-color: #8bc34a; color: white; }
+  #btnDownload { margin-top: 15px; background-color: #007bff; color:white; border:none; padding:10px; border-radius:4px; cursor:pointer; }
+  #btnDownload:hover { background-color: #0056b3; }
+  canvas { background: #fff; border-radius:8px; padding:10px; }
+</style>
+</head>
+<body>
+
+<div class="menu">
+  <button id="btnCadastro">Cadastro</button>
+  <button id="btnAdmin">Administrador</button>
+</div>
+
+<!-- Cadastro -->
+<div id="secCadastro">
+  <h2>Cadastro de Cata Treco</h2>
+  <form id="cataTrecoForm">
+      <label for="nome">Nome do solicitante:</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="telefone">Telefone:</label>
+      <input type="tel" id="telefone" name="telefone" placeholder="(XX) XXXXX-XXXX" required />
+
+      <label for="endereco">Endereço completo:</label>
+      <input type="text" id="endereco" name="endereco" required />
+
+      <label for="bairro">Bairro:</label>
+      <select id="bairro" name="bairro" required>
+          <option value="">Selecione</option>
+          <option value="Andreotti">Andreotti</option>
+          <option value="Androciolli">Androciolli</option>
+          <option value="Bela Vista">Bela Vista</option>
+          <option value="Bem Viver">Bem Viver</option>
+          <option value="Campesato">Campesato</option>
+          <option value="Canaã">Canaã</option>
+          <option value="CDHU">CDHU</option>
+          <option value="Centenário">Centenário</option>
+          <option value="Centro">Centro</option>
+          <option value="Chacara Avato">Chacara Avato</option>
+          <option value="Danúbio">Danúbio</option>
+          <option value="Esmeralda">Esmeralda</option>
+          <option value="Honorina">Honorina</option>
+          <option value="Jardim Cruzeiro">Jardim Cruzeiro</option>
+          <option value="Jardim Europa">Jardim Europa</option>
+          <option value="Jardim João Silveira">Jardim João Silveira</option>
+          <option value="Jardim Márcia">Jardim Márcia</option>
+          <option value="Jardim Nilce">Jardim Nilce</option>
+          <option value="Malvina">Malvina</option>
+          <option value="Maria Luiza">Maria Luiza</option>
+          <option value="Nossa Senhora Aparecida">Nossa Senhora Aparecida</option>
+          <option value="Pampulha">Pampulha</option>
+          <option value="Pinheiros">Pinheiros</option>
+          <option value="Prof. Simões">Prof. Simões</option>
+          <option value="Santa Angelina">Santa Angelina</option>
+          <option value="Santa Cândida">Santa Cândida</option>
+          <option value="Santa Cecília">Santa Cecília</option>
+          <option value="Santa Terezinha">Santa Terezinha</option>
+          <option value="Santana">Santana</option>
+          <option value="Santo Antônio">Santo Antônio</option>
+          <option value="São Faustino">São Faustino</option>
+          <option value="São Miguel">São Miguel</option>
+          <option value="São Vicente I e II">São Vicente I e II</option>
+          <option value="Sormani">Sormani</option>
+          <option value="Vienense">Vienense</option>
+          <option value="Cohab 4">Cohab 4</option>
+          <option value="Parque Pampulha">Parque Pampulha</option>
+          <option value="Santa Cecilia">Santa Cecilia</option>
+          <option value="Jardim Vienense">Jardim Vienense</option>
+          <option value="Recanto dos nobres">Recanto dos nobres</option>
+      </select>
+
+      <label for="dataCadastro">Data do cadastro:</label>
+      <input type="text" id="dataCadastro" name="dataCadastro" readonly />
+
+      <label for="diaSemana">Dia da coleta:</label>
+      <input type="text" id="diaSemana" name="diaSemana" readonly />
+
+      <label for="dataAgendamento">Data da Coleta Agendada:</label>
+      <input type="text" id="dataAgendamento" name="dataAgendamento" readonly />
+
+      <button type="submit" class="submit-btn">Cadastrar</button>
+  </form>
+</div>
+
+<!-- Login Administrador -->
+<div id="loginAdmin" style="display:none;">
+  <h3>Login Administrador</h3>
+  <form id="formLogin">
+    <label for="user">Usuário:</label>
+    <input type="text" id="user" name="user" required />
+    <label for="pass">Senha:</label>
+    <input type="password" id="pass" name="pass" required />
+    <button type="submit" class="submit-btn">Entrar</button>
+  </form>
+</div>
+
+<!-- Aba Administrador -->
+<div id="secAdmin" style="display:none;">
+  <h3>Relatório de Cadastros</h3>
+
+  <div style="margin-bottom:15px;">
+    <label for="filtroMes">Filtrar por Mês:</label>
+    <select id="filtroMes">
+      <option value="">Todos</option>
+      <option value="1">Janeiro</option>
+      <option value="2">Fevereiro</option>
+      <option value="3">Março</option>
+      <option value="4">Abril</option>
+      <option value="5">Maio</option>
+      <option value="6">Junho</option>
+      <option value="7">Julho</option>
+      <option value="8">Agosto</option>
+      <option value="9">Setembro</option>
+      <option value="10">Outubro</option>
+      <option value="11">Novembro</option>
+      <option value="12">Dezembro</option>
+    </select>
+
+    <label for="filtroAno">Filtrar por Ano:</label>
+    <select id="filtroAno">
+      <option value="">Todos</option>
+      <option value="2025">2025</option>
+      <option value="2026">2026</option>
+      <option value="2027">2027</option>
+    </select>
+
+    <button onclick="aplicarFiltro()">Aplicar Filtro</button>
+    <button id="btnDownload">Download do Relatório</button>
+  </div>
+
+  <table id="tabelaCadastros">
+      <thead>
+          <tr>
+              <th>Nome</th>
+              <th>Telefone</th>
+              <th>Endereço</th>
+              <th>Bairro</th>
+              <th>Data Cadastro</th>
+              <th>Dia da Coleta</th>
+              <th>Data da Coleta Agendada</th>
+          </tr>
+      </thead>
+      <tbody></tbody>
+  </table>
+
+  <h3>Gráficos de Pedidos</h3>
+  <div style="display:flex; flex-wrap:wrap; gap:30px;">
+    <div style="flex:1;">
+      <canvas id="graficoDias"></canvas>
+    </div>
+    <div style="flex:1;">
+      <canvas id="graficoBairros"></canvas>
+    </div>
+  </div>
+  <div id="resumoNumerico" style="margin-top:20px; font-weight:bold;"></div>
+
+  <button onclick="logout()">Sair</button>
+</div>
+
+<!-- Bibliotecas -->
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+  // --- Variáveis e elementos ---
+  const secCadastro = document.getElementById('secCadastro');
+  const secAdmin = document.getElementById('secAdmin');
+  const loginAdmin = document.getElementById('loginAdmin');
+  const btnCadastro = document.getElementById('btnCadastro');
+  const btnAdmin = document.getElementById('btnAdmin');
+  const btnDownload = document.getElementById('btnDownload');
+
+  const form = document.getElementById('cataTrecoForm');
+  const bairroInput = document.getElementById('bairro');
+  const dataCadastroInput = document.getElementById('dataCadastro');
+  const diaSemanaInput = document.getElementById('diaSemana');
+  const dataAgendamentoInput = document.getElementById('dataAgendamento');
+  const tabelaBody = document.querySelector('#tabelaCadastros tbody');
+  const formLogin = document.getElementById('formLogin');
+
+  let cadastros = [];
+  let adminLogado = false;
+
+  const USUARIO_ADMIN = 'Alecsander@admin.com.br';
+  const SENHA_ADMIN = 'Le150801@';
+
+  const bairroDia = {
+      "Andreotti": "Terça-feira","Androciolli": "Terça-feira","Bela Vista": "Quarta-feira",
+      "Bem Viver": "Quinta-feira","Campesato": "Quinta-feira","Canaã": "Segunda-feira",
+      "CDHU": "Quarta-feira","Centenário": "Quinta-feira","Centro": "Terça-feira",
+      "Chacara Avato": "Terça-feira","Danúbio": "Terça-feira","Esmeralda": "Segunda-feira",
+      "Honorina": "Segunda-feira","Jardim Cruzeiro": "Segunda-feira","Jardim Europa": "Quinta-feira",
+      "Jardim João Silveira": "Quinta-feira","Jardim Márcia": "Segunda-feira","Jardim Nilce": "Quinta-feira",
+      "Malvina": "Segunda-feira","Maria Luiza": "Quarta-feira","Nossa Senhora Aparecida": "Quarta-feira",
+      "Pampulha": "Quinta-feira","Pinheiros": "Terça-feira","Prof. Simões": "Quarta-feira",
+      "Santa Angelina": "Segunda-feira","Santa Cândida": "Quarta-feira","Santa Cecília": "Terça-feira",
+      "Santa Terezinha": "Terça-feira","Santana": "Segunda-feira","Santo Antônio": "Quarta-feira",
+      "São Faustino": "Terça-feira","São Miguel": "Terça-feira","São Vicente I e II": "Quarta-feira",
+      "Sormani": "Terça-feira","Vienense": "Terça-feira","Cohab 4": "Quinta-feira",
+      "Parque Pampulha": "Quinta-feira","Santa Cecilia": "Terça-feira","Jardim Vienense": "Terça-feira",
+      "Recanto dos nobres": "Sexta-feira"
+  };
+
+  // --- Funções de datas ---
+  function preencherDataCadastro() {
+      const hoje = new Date();
+      const dia = String(hoje.getDate()).padStart(2, '0');
+      const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+      const ano = hoje.getFullYear();
+      dataCadastroInput.value = `${dia}/${mes}/${ano}`;
+  }
+
+  function calcularDataColeta(dataCadastro, diaSemanaColeta, horaLimite = {h:14, m:30}) {
+      const diasMap = { "domingo":0,"segunda-feira":1,"terça-feira":2,"quarta-feira":3,"quinta-feira":4,"sexta-feira":5,"sábado":6 };
+      const diaColetaNum = diasMap[diaSemanaColeta.toLowerCase()];
+      if(diaColetaNum === undefined) return null;
+
+      const diaCadastroNum = dataCadastro.getDay();
+      const horaCadastro = dataCadastro.getHours();
+      const minCadastro = dataCadastro.getMinutes();
+
+      let diasAteColeta = (diaColetaNum - diaCadastroNum + 7) % 7;
+      if(diasAteColeta === 0){
+          if(horaCadastro > horaLimite.h || (horaCadastro === horaLimite.h && minCadastro >= horaLimite.m)){
+              diasAteColeta = 7;
+          }
+      }
+
+      const dataColeta = new Date(dataCadastro);
+      dataColeta.setDate(dataCadastro.getDate() + diasAteColeta);
+
+      const dia = String(dataColeta.getDate()).padStart(2,'0');
+      const mes = String(dataColeta.getMonth()+1).padStart(2,'0');
+      const ano = dataColeta.getFullYear();
+
+      return `${dia}/${mes}/${ano}`;
+  }
+
+  // --- Eventos ---
+  bairroInput.addEventListener('change', () => {
+      const bairro = bairroInput.value;
+      const diaSemana = bairroDia[bairro] || '';
+      diaSemanaInput.value = diaSemana;
+
+      if(diaSemana){
+          const agora = new Date();
+          const dataColetaFormatada = calcularDataColeta(agora, diaSemana);
+          dataAgendamentoInput.value = dataColetaFormatada || '';
+      } else {
+          dataAgendamentoInput.value = '';
+      }
+  });
+
+  btnCadastro.addEventListener('click', () => {
+      secCadastro.style.display = 'block';
+      secAdmin.style.display = 'none';
+      loginAdmin.style.display = 'none';
+      adminLogado = false;
+  });
+
+  btnAdmin.addEventListener('click', () => {
+      if(adminLogado){
+          mostrarAdmin();
+      } else {
+          secCadastro.style.display = 'none';
+          secAdmin.style.display = 'none';
+          loginAdmin.style.display = 'block';
+      }
+  });
+
+  formLogin.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const user = formLogin.user.value.trim();
+      const pass = formLogin.pass.value.trim();
+      if(user === USUARIO_ADMIN && pass === SENHA_ADMIN){
+          adminLogado = true;
+          loginAdmin.style.display = 'none';
+          mostrarAdmin();
+      } else {
+          alert('Usuário ou senha incorretos!');
+      }
+  });
+
+  function mostrarAdmin(){
+      secAdmin.style.display = 'block';
+      secCadastro.style.display = 'none';
+      loginAdmin.style.display = 'none';
+      aplicarFiltro();
+  }
+
+  function logout(){
+      adminLogado = false;
+      secAdmin.style.display = 'none';
+      loginAdmin.style.display = 'none';
+      secCadastro.style.display = 'block';
+  }
+
+  // --- Cadastro ---
+  preencherDataCadastro();
+
+  form.addEventListener('submit', event => {
+      event.preventDefault();
+      if (!diaSemanaInput.value) { alert('Selecione um bairro válido.'); return; }
+      if (!dataAgendamentoInput.value) { alert('Erro ao calcular data da coleta.'); return; }
+
+      const dados = {
+          nome: form.nome.value,
+          telefone: form.telefone.value,
+          endereco: form.endereco.value,
+          bairro: form.bairro.value,
+          dataCadastro: dataCadastroInput.value,
+          diaColeta: diaSemanaInput.value,
+          dataAgendamento: dataAgendamentoInput.value
+      };
+
+      cadastros.push(dados);
+      alert('Cadastro realizado com sucesso!');
+      form.reset();
+      preencherDataCadastro();
+      diaSemanaInput.value = '';
+      dataAgendamentoInput.value = '';
+      if(adminLogado) aplicarFiltro();
+  });
+
+  // --- Relatório e Gráficos ---
+  let graficoDiasObj, graficoBairrosObj;
+
+  function aplicarFiltro() {
+      const mesFiltro = document.getElementById('filtroMes').value;
+      const anoFiltro = document.getElementById('filtroAno').value;
+
+      tabelaBody.innerHTML = '';
+
+      const pedidosFiltrados = cadastros.filter(c => {
+          const partes = c.dataAgendamento.split('/');
+          const dataObj = new Date(partes[2], partes[1]-1, partes[0]);
+          const mesOk = !mesFiltro || (dataObj.getMonth()+1 == mesFiltro);
+          const anoOk = !anoFiltro || (dataObj.getFullYear() == anoFiltro);
+          return mesOk && anoOk;
+      });
+
+      pedidosFiltrados.forEach(c => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${c.nome}</td><td>${c.telefone}</td><td>${c.endereco}</td>
+                          <td>${c.bairro}</td><td>${c.dataCadastro}</td><td>${c.diaColeta}</td>
+                          <td>${c.dataAgendamento}</td>`;
+          tabelaBody.appendChild(tr);
+      });
+
+      atualizarGraficos(pedidosFiltrados);
+  }
+
+  function atualizarGraficos(pedidosFiltrados){
+      // Resumo
+      const resumo = {};
+      pedidosFiltrados.forEach(c => { resumo[c.diaColeta] = (resumo[c.diaColeta]||0)+1 });
+      const resumoBairro = {};
+      pedidosFiltrados.forEach(c => { resumoBairro[c.bairro] = (resumoBairro[c.bairro]||0)+1 });
+
+      document.getElementById('resumoNumerico').innerHTML = `
+        Total de Pedidos: ${pedidosFiltrados.length}<br>
+        Pedidos por dia: ${JSON.stringify(resumo)}<br>
+        Pedidos por bairro: ${JSON.stringify(resumoBairro)}
+      `;
+
+      // Gráfico Dias
+      const labelsDias = Object.keys(resumo);
+      const dataDias = Object.values(resumo);
+
+      if(graficoDiasObj) graficoDiasObj.destroy();
+      graficoDiasObj = new Chart(document.getElementById('graficoDias'), {
+          type: 'bar',
+          data: { labels: labelsDias, datasets:[{label:'Pedidos por Dia', data:dataDias, backgroundColor:'#4caf50'}] },
+          options: { responsive:true, plugins:{legend:{display:false}} }
+      });
+
+      // Gráfico Bairros
+      const labelsBairros = Object.keys(resumoBairro);
+      const dataBairros = Object.values(resumoBairro);
+
+      if(graficoBairrosObj) graficoBairrosObj.destroy();
+      graficoBairrosObj = new Chart(document.getElementById('graficoBairros'), {
+          type: 'pie',
+          data: { labels: labelsBairros, datasets:[{label:'Pedidos por Bairro', data:dataBairros, backgroundColor:labelsBairros.map(_=>`hsl(${Math.random()*360},70%,50%)`)}] },
+          options:{ responsive:true }
+      });
+  }
+
+  // --- Download Excel ---
+  btnDownload.addEventListener('click', () => {
+      const wb = XLSX.utils.book_new();
+      const data = [["Nome","Telefone","Endereço","Bairro","Data Cadastro","Dia da Coleta","Data Agendada"]];
+      const mesFiltro = document.getElementById('filtroMes').value;
+      const anoFiltro = document.getElementById('filtroAno').value;
+
+      cadastros.forEach(c => {
+          const partes = c.dataAgendamento.split('/');
+          const dataObj = new Date(partes[2], partes[1]-1, partes[0]);
+          const mesOk = !mesFiltro || (dataObj.getMonth()+1 == mesFiltro);
+          const anoOk = !anoFiltro || (dataObj.getFullYear() == anoFiltro);
+          if(mesOk && anoOk) data.push([c.nome,c.telefone,c.endereco,c.bairro,c.dataCadastro,c.diaColeta,c.dataAgendamento]);
+      });
+
+      const ws = XLSX.utils.aoa_to_sheet(data);
+      XLSX.utils.book_append_sheet(wb, ws, "Relatório");
+      XLSX.writeFile(wb, `Relatorio_CataTreco_${new Date().getTime()}.xlsx`);
+  });
+</script>
+
+</body>
+</html>
